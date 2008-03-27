@@ -1,0 +1,11 @@
+HTTP based Socialcalc interface
+
+Read file on startup
+* js client makes connection
+* http thread serves result
+* poll every 5s?
+* always return empty request
+* return file data sometimes
+** json response - type: data:
+
+Write file when requested
