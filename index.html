@@ -7,36 +7,12 @@
             document.getElementById('baz').innerHTML = msg;
         }
 
-        document.observer = {
-          observe: function(subject,topic,data){
-            document.set_msg("Topic sent: " + topic + " - " + data);
-          }
-        };
-
    
         function foo_button(self) {
-          try {
-            netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");  
-            var observerService = Components.classes["@mozilla.org/observer-service;1"]
-                .getService(Components.interfaces.nsIObserverService);
-            observerService.addObserver(document.observer,"my-topic",false);
-            observerService.notifyObservers(self,"my-topic","foo");
-          }
-          catch(err) {
-              document.set_msg(err)
-          }
+          document.set_msg('foo')
         }
         function bar_button(self) {
-          try {
-            netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");  
-            var observerService = Components.classes["@mozilla.org/observer-service;1"]
-                .getService(Components.interfaces.nsIObserverService);
-            observerService.addObserver(document.observer,"my-topic",false);
-            observerService.notifyObservers(self,"my-topic","bar");
-          }
-          catch(err) {
-              document.set_msg(err)
-          }
+          document.set_msg('bar')
         }
 
     </script>
