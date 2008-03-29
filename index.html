@@ -1,15 +1,27 @@
 <html>
     <head>
-        <title>Foo</title>
+        <title>HTTPActivity Hello World Example</title>
         <script type="text/javascript" src="http://localhost:4080/xo.js"></script>
+
         <script type="text/javascript">
-            jQuery(function () {
-                jQuery("<div><p>Hello</p></div>").appendTo("body")
-            })
+            // 
+            // Application-specific hooks are set up
+            //  Note: s/document/XO module/
+            //
+            document.XO_read_hook = function (content) {
+                // Do something with the read content
+                jQuery('textarea').html(content)
+            }
+            document.XO_write_hook = function () {
+                // Calculate some values
+                return jQuery('textarea').html()
+            }
         </script>
     </head>
+
     <body>
-        <div id="hello">Hello World!</div>
+        <h1>HTTPActivity - Hello World!</h1>
+        <textarea class="savedata">Saved data not loaded</textarea>
         <hr />
     </body>
 </html>
