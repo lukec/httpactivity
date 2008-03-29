@@ -1,8 +1,10 @@
-all: xo.js
+JS_TARGET=web/xo.js
+
+all: $(JS_TARGET)
 
 clean:
-	rm xo.js *.pyc
+	rm -f $(JS_TARGET) *.pyc
 
-xo.js: xo-code.js Makefile
-	cat jquery-1.2.3.js > xo.js
-	cat xo-code.js >> xo.js
+web/xo.js: web/xo-code.js Makefile
+	cat web/jquery-1.2.3.js > $(JS_TARGET)
+	cat web/xo-code.js >> $(JS_TARGET)
