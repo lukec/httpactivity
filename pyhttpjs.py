@@ -1,57 +1,44 @@
 #!/usr/bin/python
-import BaseHTTPServer
-import SimpleHTTPServer
-import thread
-import httplib
-from time import sleep
 import os
 import gtk
 import hulahop
 hulahop.startup(os.path.expanduser('~/.test-hulahop'))
 from hulahop.webview import WebView
+from XOHTTPServer import XOHTTPServer
 
-class XORequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
-    def init (self, request, client_address, server):
-        SimpleHTTPServer.SimpleHTTPRequestHandler.__init__(self, request, 
-                                                           client_address, server)
-
-class SocialCalcServer:
-    def __init__(self):
-        self.port = 4080
-
-    def start(self):
-        try:
-            t = thread.start_new(
-                    self._socialcalc_server,
-                    ())
-        except Exception, e:
-            print "EXCEPTION: " + str(e)
-        self._server_thread = t
-        print "Started thread"
-
-    def _socialcalc_server(self, *args, **keys):
-        print "Starting HTTP Server on port: %s"%self.port
-        server = BaseHTTPServer.HTTPServer(("", self.port), XORequestHandler)
-        server.serve_forever()
-
-
-s = SocialCalcServer()
+s = XOHTTPServer()
 s.start()
 
 def quit(window):
     hulahop.shutdown()
     gtk.main_quit()
 
+def do_keypress(window, key):
+    char = key.string
+    if (char == 'w'):
+        simulate_write_file()
+    if (char == 'r'):
+        simulate_read_file()
+
+def simulate_read_file():
+    write_file('{ "command": "read", "content": "foo" }')
+
+def simulate_write_file():
+    write_file('{ "command": "write" }')
+
+def write_file(content):
+    fh = open('status.json', 'w')
+    fh.write(content)
+
 window = gtk.Window()
 window.set_default_size(600, 400)
 window.connect("destroy", quit)
+window.connect("key_press_event", do_keypress)
 
 web_view = WebView()
 web_view.load_uri("http://localhost:%s/index.html"%s.port)
-#web_view.load_uri("/home/olpc/src/pyhttpjs/index.html")
 web_view.show()
-
 window.add(web_view)
-window.show()
 
+window.show()
 gtk.main()
