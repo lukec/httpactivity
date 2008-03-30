@@ -1,17 +1,64 @@
-HTTP based Socialcalc interface
+HTTP based Socialcalc Interface TODO List
 
-Read file on startup
-* js client makes connection
-* http thread serves result
-* poll every 5s?
-* always return empty request
-* return file data sometimes
-** json response - type: data:
-
-Write file when requested
+* Create HTTPActivity.py
+* Create OnePageWikiActivity.py
 
 
-future notes:
+Could Do List
 * include jquery pdf in pyhttpjs - great docs
-* toolkit for simple web based xo apps
-* XO.js
+* have a special uid in each request
+* server could support syncing several clients
+* blog post about this process - dev tools, good/bad
+
+----
+
+Packaging - HTTPActivity
+
+Desc: A base class for building simple web clients
+
+Synopsis:
+  import HTTPActivity
+  
+  class MyActivity(HTTPActivity):
+    TODO - add more synopsis
+
+Overview:
+  Your web based application must be able, at a minimum, to launch and display
+  itself, write state to the journal, and load back up from the journal.
+
+  Starting up your application:
+    A web server will be started on an internal port, and web/index.html will
+    be loaded in the webserver
+
+  Your application must define two javascript hooks that will be called to
+  interact with the journal.
+    
+    document.XO_read_hook = function (content) {
+        // Do something with the content
+        // Eg: stick it in a textarea in the page
+        jQuery('textarea').html(content)
+    }
+    document.XO_write_hook = function () {
+        // Return the content to save to the journal
+        // Eg: save the content of a textarea
+        return jQuery('textarea').html()
+    }
+
+  In the background, the browser will make HTTP requests to the built-in HTTP
+  server.  Based on the response of the server, different hooks will be
+  called.
+
+  Pro-active saving:
+    It may be possible to lose data (unconfirmed) if the activity is closed
+    before the browser has time to write to the journal.  So you may want to
+    proactively save, if the browser is idle, or a big change has happened.
+
+      XO.write_to_journal( save_content )
+
+    This will tell the python activity to save this content the next chance it
+    has.
+
+  Technical Note:  Currently the server immediately returns the requests, but
+  a possible improvement is for the server to hold the request open until it
+  times out or there is a response ready.
+
