@@ -9,3 +9,9 @@ Read file on startup
 ** json response - type: data:
 
 Write file when requested
+
+
+future notes:
+* include jquery pdf in pyhttpjs - great docs
+* toolkit for simple web based xo apps
+* XO.js

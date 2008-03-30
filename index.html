@@ -1,27 +1,16 @@
 <html>
     <head>
         <title>Foo</title>
+        <script type="text/javascript" src="http://localhost:4080/xo.js"></script>
+        <script type="text/javascript">
+            jQuery(function () {
+                jQuery("<div><p>Hello</p></div>").appendTo("body")
+            })
+        </script>
     </head>
-    <script type="text/javascript">
-        document.set_msg = function (msg) {
-            document.getElementById('baz').innerHTML = msg;
-        }
-
-   
-        function foo_button(self) {
-          document.set_msg('foo')
-        }
-        function bar_button(self) {
-          document.set_msg('bar')
-        }
-
-    </script>
     <body>
-        <form>
-            <input type="button" name="foo" value="Foo" onClick="foo_button()">
-            <input type="button" name="bar" value="Bar" onClick="bar_button()">
-        </form>
-        <div id="baz">Empty</div>
+        <div id="hello">Hello World!</div>
+        <hr />
     </body>
 </html>
 

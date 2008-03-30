@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import BaseHTTPServer
+import SimpleHTTPServer
 import thread
 import httplib
 from time import sleep
@@ -9,13 +10,10 @@ import hulahop
 hulahop.startup(os.path.expanduser('~/.test-hulahop'))
 from hulahop.webview import WebView
 
-class SocialcalcRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+class XORequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     def init (self, request, client_address, server):
-        BaseHTTPServer.BaseHTTPRequestHandler.__init__(self, request, 
+        SimpleHTTPServer.SimpleHTTPRequestHandler.__init__(self, request, 
                                                            client_address, server)
-
-    def do_GET(self):
-        self.send_response(200, "Awesome")
 
 class SocialCalcServer:
     def __init__(self):
@@ -33,28 +31,24 @@ class SocialCalcServer:
 
     def _socialcalc_server(self, *args, **keys):
         print "Starting HTTP Server on port: %s"%self.port
-        server = BaseHTTPServer.HTTPServer(("", self.port), SocialcalcRequestHandler)
+        server = BaseHTTPServer.HTTPServer(("", self.port), XORequestHandler)
         server.serve_forever()
 
 
 s = SocialCalcServer()
 s.start()
 
-
 def quit(window):
     hulahop.shutdown()
     gtk.main_quit()
 
-def keypress(window, key):
-    print "pressed: " + key.string
-
 window = gtk.Window()
 window.set_default_size(600, 400)
 window.connect("destroy", quit)
-window.connect("key_press_event", keypress)
 
 web_view = WebView()
-web_view.load_uri('file:///home/olpc/src/pyhttpjs/index.html')
+web_view.load_uri("http://localhost:%s/index.html"%s.port)
+#web_view.load_uri("/home/olpc/src/pyhttpjs/index.html")
 web_view.show()
 
 window.add(web_view)
