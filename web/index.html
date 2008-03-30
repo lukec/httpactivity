@@ -1,7 +1,7 @@
 <html>
     <head>
         <title>HTTPActivity Hello World Example</title>
-        <script type="text/javascript" src="http://localhost:4080/xo.js"></script>
+        <script type="text/javascript" src="/xo.js"></script>
 
         <script type="text/javascript">
             // 
@@ -17,11 +17,18 @@
                 return jQuery('textarea').html()
             }
         </script>
+        <style type="text/css">
+.savedata {
+    width: 600;
+    height: 300;
+}
+        </style>
     </head>
 
     <body>
         <h1>HTTPActivity - Hello World!</h1>
-        <textarea class="savedata">Saved data not loaded</textarea>
+        <textarea class="savedata">Saved data not loaded</textarea><br />
+        <button value="Save">Save!</button>
         <hr />
     </body>
 </html>
