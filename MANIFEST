@@ -1,12 +1,14 @@
 ./web/xo.js
 ./web/jquery-1.2.3.js
-./web/json.js
 ./web/xo-code.js
 ./web/index.html
 NEWS
-httpactivity.py
 Makefile
-OnePageWikiActivity.py
 activity/activity.info
 activity/activity-onepagewiki.svg
 MANIFEST
+OnePageWikiActivity.py
+HTTPActivity.py
+XOHTTPServer.py
+XOHTTPStatus.py
+json.py
