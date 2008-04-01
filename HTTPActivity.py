@@ -23,9 +23,7 @@ class HTTPActivity(activity.Activity):
         # Set up the HTTP server thread
         self.port = 4080
         try:
-            t = thread.start_new(
-                    self._socialcalc_server_thread,
-                    ())
+            t = thread.start_new_thread(self._socialcalc_server_thread, ())
         except Exception, e:
             print "EXCEPTION: " + str(e)
         self._server_thread = t
@@ -43,6 +41,9 @@ class HTTPActivity(activity.Activity):
 
     def write_file(self, filename):
         print "write_file: " + filename
+        f = open('web/status.json', 'w')
+        f.write('{ "command" : "write" }')
+        print "wrote status.json"
 
     def read_file(self, filename):
         print "read_file: " + filename
@@ -55,8 +56,7 @@ class XOHTTPRequestHandler(SimpleHTTPRequestHandler):
         print "Content: (%s)"%content
 
     def do_GET(self):
-        if self.path == "/status.json":
-            print "Special JSON!"
+        print "do_GET: " + self.path
         SimpleHTTPRequestHandler.do_GET(self)
 
     def translate_path(self, path):
