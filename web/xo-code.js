@@ -10,7 +10,6 @@ var XO = window.XO = {
     poll_for_command: function () {
         XO.set_status('Polling for a command')
         $.getJSON("/status.json", function(json){
-            XO.set_status('Received command: ' + json.command)
             if (json.command == "read") {
                 // Content to read, so send it to the application
                 XO.read_hook(json.content)
@@ -24,12 +23,19 @@ var XO = window.XO = {
                     url:  '/write',
                     data: { 'save_content': XO.write_hook() },
                     success: function() {
-                        XO.set_status('Send save data to server')
+                        XO.set_status('Sent save data to server')
                     }
                 })
+            }
+            else if (json.command == 'idle') {
+                XO.set_status('Idle - no command')
+            }
+            else {
+                XO.set_status('Unknown command: ' + json.command)
             }
         })
     }
 }
 
 jQuery(function() {XO.poll_for_command()})
+setInterval(function() {XO.poll_for_command()}, 10000)

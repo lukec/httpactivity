@@ -7,7 +7,8 @@ import gtk
 import hulahop
 from BaseHTTPServer import HTTPServer
 import thread
-import from XOHTTPServer import XOHTTPRequestHandler
+from XOHTTPServer import XOHTTPRequestHandler
+import XOHTTPStatus
 
 hulahop.startup(os.path.join(env.get_profile_path(), 'gecko'))
 from hulahop.webview import WebView
@@ -21,6 +22,7 @@ class HTTPActivity(activity.Activity):
         toolbox.show()
 
         # Set up the HTTP server thread
+        XOHTTPStatus.initialize()
         self.port = 4080
         try:
             t = thread.start_new_thread(self._socialcalc_server_thread, ())
@@ -30,7 +32,7 @@ class HTTPActivity(activity.Activity):
         
         wv = WebView()
         bundle_path = get_bundle_path()
-        wv.load_uri('file://' + bundle_path + '/web/index.html')
+        wv.load_uri('http://localhost:%s/index.html'%self.port)
         wv.show()
         self.set_canvas(wv)
 
@@ -41,10 +43,13 @@ class HTTPActivity(activity.Activity):
 
     def write_file(self, filename):
         print "write_file: " + filename
-        f = open('web/status.json', 'w')
-        f.write('{ "command" : "write" }')
-        print "wrote status.json"
+        XOHTTPStatus.write_status({ 'command': 'write', 'filename': filename})
 
     def read_file(self, filename):
         print "read_file: " + filename
+        fh = open(filename, 'r')
+        content = fh.read()
+        XOHTTPStatus.write_status({ 'command': 'read', 'content': content})
+        
+
 

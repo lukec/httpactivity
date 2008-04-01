@@ -25,13 +25,14 @@ class XOHTTPRequestHandler(SimpleHTTPRequestHandler):
 
     def write_file(self, content):
         # read the json file to determine where to save the content
-        status = XOHTTPStatus.read()
+        status = XOHTTPStatus.read_status()
         if status['command'] != 'write': 
             return
         fh = open(status['filename'], 'w')
         fh.write(content)
         fh.close()
         print "Saved content to %s"%status['filename']
+        XOHTTPStatus.initialize()
 
 
 def main():

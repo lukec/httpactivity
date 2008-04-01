@@ -16,6 +16,10 @@
                 // Calculate some values
                 return jQuery('textarea').html()
             }
+
+            // Set up hooks to poll for UI actions
+            jQuery('textarea').blur( function () { XO.poll_for_command() } )
+            jQuery(window).unload( function () { XO.poll_for_command() } )
         </script>
         <style type="text/css">
 .savedata {
