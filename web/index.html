@@ -8,11 +8,11 @@
             // Application-specific hooks are set up
             //  Note: s/document/XO module/
             //
-            document.XO_read_hook = function (content) {
+            XO.read_hook = function (content) {
                 // Do something with the read content
                 jQuery('textarea').html(content)
             }
-            document.XO_write_hook = function () {
+            XO.write_hook = function () {
                 // Calculate some values
                 return jQuery('textarea').html()
             }
@@ -27,8 +27,9 @@
 
     <body>
         <h1>HTTPActivity - Hello World!</h1>
-        <textarea class="savedata">Saved data not loaded</textarea><br />
-        <button value="Save">Save!</button>
+        Status: <span class="status">None</span><br />
+        <textarea class="savedata">Empty - add text here</textarea><br />
+        <button onclick="$('#status').html('Starting poll'); XO.poll_for_command()">Poll!</button>
         <hr />
     </body>
 </html>

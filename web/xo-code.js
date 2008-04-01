@@ -1,7 +1,18 @@
-jQuery(function () {
-    poller = function () {
+var XO = window.XO = 
+var XO = window.XO = {
+    // 
+    // Application Hooks
+    //
+    XO.read_hook:  function() {alert 'read hook is not defined'},
+    XO.write_hook: function() {alert 'write hook is not defined'},
+    set_status: function (msg) {
+        jQuery("#status").html(msg)
+    },
+    poll_for_command: function () {
+        XO.set_status('Polling for a command')
         $.getJSON("/status.json", function(json){
-            $("<p>Command:" + json.command + "</p>").appendTo("body")
+            XO.set_status('Received command: ' + json.command)
+            return;
             if (json.command == "read") {
                 document.XO_read_hook(json.content)
             }
@@ -9,12 +20,7 @@ jQuery(function () {
                 var save_content = document.XO_write_hook()
                 $.post("/write", { "content" : save_content })
             }
-            else {
-                $("<p>Unknown</p>").appendTo("body")
-            }
         })
     }
-
-    setInterval( "poller()", 5000 )
-})
+}
 
