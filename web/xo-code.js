@@ -1,10 +1,9 @@
-var XO = window.XO = 
 var XO = window.XO = {
     // 
     // Application Hooks
     //
-    XO.read_hook:  function() {alert 'read hook is not defined'},
-    XO.write_hook: function() {alert 'write hook is not defined'},
+    read_hook:  function() {alert('read hook is not defined')},
+    write_hook: function() {alert('write hook is not defined')},
     set_status: function (msg) {
         jQuery("#status").html(msg)
     },
@@ -12,15 +11,25 @@ var XO = window.XO = {
         XO.set_status('Polling for a command')
         $.getJSON("/status.json", function(json){
             XO.set_status('Received command: ' + json.command)
-            return;
             if (json.command == "read") {
-                document.XO_read_hook(json.content)
+                // Content to read, so send it to the application
+                XO.read_hook(json.content)
+                XO.set_status('Read content from server')
             }
             else if (json.command == "write") {
-                var save_content = document.XO_write_hook()
-                $.post("/write", { "content" : save_content })
+                // Call the write hook to fetch content, then POST
+                // it back to the server
+                jQuery.ajax({
+                    type: 'POST',
+                    url:  '/write',
+                    data: { 'save_content': XO.write_hook() },
+                    success: function() {
+                        XO.set_status('Send save data to server')
+                    }
+                })
             }
         })
     }
 }
 
+jQuery(function() {XO.poll_for_command()})

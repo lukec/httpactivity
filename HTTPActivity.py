@@ -5,9 +5,9 @@ import logging
 import sys, os
 import gtk
 import hulahop
-import BaseHTTPServer
-from SimpleHTTPServer import SimpleHTTPRequestHandler
+from BaseHTTPServer import HTTPServer
 import thread
+import from XOHTTPServer import XOHTTPRequestHandler
 
 hulahop.startup(os.path.join(env.get_profile_path(), 'gecko'))
 from hulahop.webview import WebView
@@ -36,7 +36,7 @@ class HTTPActivity(activity.Activity):
 
     def _socialcalc_server_thread(self, *args, **keys):
         print "Starting HTTP Server on port: %s"%self.port
-        server = BaseHTTPServer.HTTPServer(("", self.port), XOHTTPRequestHandler)
+        server = HTTPServer(("", self.port), XOHTTPRequestHandler)
         server.serve_forever()
 
     def write_file(self, filename):
@@ -47,19 +47,4 @@ class HTTPActivity(activity.Activity):
 
     def read_file(self, filename):
         print "read_file: " + filename
-
-
-class XOHTTPRequestHandler(SimpleHTTPRequestHandler):
-    def do_POST(self):
-        print "Got post!"
-        content = self.rfile.read()
-        print "Content: (%s)"%content
-
-    def do_GET(self):
-        print "do_GET: " + self.path
-        SimpleHTTPRequestHandler.do_GET(self)
-
-    def translate_path(self, path):
-        return SimpleHTTPRequestHandler.translate_path(self, '/web' + path)
-
 
